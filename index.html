@@ -560,6 +560,15 @@ function renderizar() {
   $("mensagem").textContent =
     "Cálculo concluído. Os resultados são estimativas e dependem das regras informadas.";
 }
+$("calcular").addEventListener("click", renderizar);
+$("etapa").addEventListener("change", renderizar);
+$("restaurar").addEventListener("click", () => location.reload());
+
+renderizar();
+</script>
+</body>
+</html>
+
 
 $("calcular").addEventListener("click", renderizar);
 $("etapa").addEventListener("change", renderizar);
