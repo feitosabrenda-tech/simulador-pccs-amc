@@ -1,461 +1,665 @@
 
-<!doctype html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Simulador PCCS AMC — estimativa não oficial</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulador PCCS AMC</title>
 <style>
-:root{--navy:#12304a;--blue:#1769aa;--light:#f2f6fa;--line:#d7e0e8;--text:#1d2935}
-*{box-sizing:border-box}
-body{margin:0;background:var(--light);color:var(--text);font:16px/1.45 Arial,sans-serif}
-.wrap{max-width:1000px;margin:auto;padding:14px}
-.hero{background:var(--navy);color:#fff;padding:22px;border-radius:15px}
-.hero h1{margin:0 0 6px;font-size:clamp(24px,5vw,34px)}
-.notice,.card{border-radius:12px;padding:15px;margin:14px 0}
-.notice{background:#fff4d6;border:1px solid #e8c96b}
-.card{background:white;border:1px solid var(--line)}
-h2{margin:0 0 14px;color:var(--navy);font-size:20px}
-.grid,.metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
-.field{min-width:0}
-label{display:block;font-weight:bold;font-size:14px;margin-bottom:5px}
-input,select{width:100%;min-height:44px;padding:10px;border:1px solid #aebdca;border-radius:8px;background:#fff;font:inherit}
-small,.hint,footer{font-size:13px;color:#536575}
-.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
-button{border:0;border-radius:8px;padding:12px 16px;font-weight:bold;font-size:15px}
-.primary{background:var(--blue);color:white}
-.secondary{background:#e8eef4;color:var(--navy)}
-.tablewrap{overflow-x:auto}
-table{border-collapse:collapse;width:100%;min-width:600px}
-th,td{padding:9px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}
-th:first-child,td:first-child{text-align:left}
-th{background:#edf3f8;color:var(--navy)}
-.total{font-weight:bold;background:#f3f8fc}
-.metric{border:1px solid var(--line);padding:12px;border-radius:9px;background:#fbfdff}
-.metric span{display:block;color:#536575;font-size:13px}
-.metric strong{font-size:18px;color:var(--navy);overflow-wrap:anywhere}
-footer{padding:10px 2px 24px}
-@media(max-width:640px){.grid,.metrics{grid-template-columns:1fr}.wrap{padding:10px}}
+:root {
+  --azul: #173b63;
+  --azul2: #245b8f;
+  --fundo: #f1f4f8;
+  --borda: #d5dce5;
+  --verde: #176b43;
+}
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--fundo);
+  color: #202936;
+  line-height: 1.45;
+}
+header {
+  background: var(--azul);
+  color: white;
+  padding: 24px 16px;
+  text-align: center;
+}
+header h1 { margin: 0 0 6px; font-size: 25px; }
+header p { margin: 0; }
+main { max-width: 1100px; margin: auto; padding: 16px; }
+.aviso {
+  background: #fff5d9;
+  border: 1px solid #e6cc7a;
+  border-radius: 8px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+.secao {
+  background: white;
+  border: 1px solid var(--borda);
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 16px;
+}
+h2 { color: var(--azul); font-size: 20px; margin-top: 0; }
+h3 { color: var(--azul); font-size: 17px; }
+.grade {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+}
+.campo { min-width: 0; }
+.campo label {
+  display: block;
+  font-size: 14px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.campo small { display: block; color: #596579; margin-top: 4px; }
+input, select {
+  width: 100%;
+  min-width: 0;
+  padding: 11px;
+  border: 1px solid #aeb9c8;
+  border-radius: 6px;
+  background: white;
+  font-size: 16px;
+  color: #202936;
+}
+input:focus, select:focus {
+  outline: 2px solid #78a9d9;
+  border-color: var(--azul2);
+}
+.acoes { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 18px; }
+button {
+  border: 0;
+  border-radius: 7px;
+  padding: 12px 16px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.principal { background: var(--azul2); color: white; }
+.secundario { background: #e6ebf1; color: #25364a; }
+.resultado-destaque {
+  background: #e8f4ec;
+  border: 1px solid #b8d9c3;
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 14px;
+}
+.resultado-destaque strong { color: var(--verde); }
+.tabela-wrap { overflow-x: auto; }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 600px;
+  font-size: 14px;
+}
+th, td {
+  border: 1px solid var(--borda);
+  padding: 9px;
+  text-align: right;
+}
+th { background: #e8edf4; color: #173b63; }
+th:first-child, td:first-child { text-align: left; }
+tr.total td { font-weight: bold; background: #edf4fb; }
+tr.liquido td { font-weight: bold; background: #e3f3e8; color: #145d39; }
+.nota { color: #536174; font-size: 13px; }
+.erro { color: #a11; font-weight: bold; margin-top: 10px; }
+footer { text-align: center; padding: 20px; color: #596579; font-size: 13px; }
+@media (min-width: 760px) {
+  .grade { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (max-width: 420px) {
+  main { padding: 10px; }
+  .secao { padding: 12px; }
+  header h1 { font-size: 22px; }
+  .grade { grid-template-columns: 1fr; }
+}
 </style>
 </head>
 <body>
-<main class="wrap">
 
-<header class="hero">
-<h1>Simulador PCCS AMC</h1>
-Simulação individual de remuneração — proposta não oficial
+<header>
+  <h1>Simulador PCCS AMC</h1>
+  <p>Simulação individual de remuneração — proposta não oficial</p>
 </header>
 
-<div class="notice">
-<b>Atenção:</b> simulador estimativo. Não representa tabela oficial nem proposta aprovada. Confirme regras e percentuais em fontes oficiais.
-</div>
+<main>
+  <div class="aviso">
+    <strong>Atenção:</strong> simulador estimativo. Não representa tabela oficial nem proposta aprovada. Confirme regras e percentuais em fontes oficiais.
+  </div>
 
-<section class="card">
-<h2>1. Dados individuais</h2>
-<div class="grid">
+  <section class="secao">
+    <h2>1. Dados individuais</h2>
+    <div class="grade">
+      <div class="campo">
+        <label for="vb">Vencimento-base atual (R$)</label>
+        <input id="vb" type="number" min="0" step="0.01" value="5912.60">
+        <small>Valor sugerido, editável por cada agente.</small>
+      </div>
 
-<div class="field">
-<label for="vb">Vencimento-base de referência (R$)</label>
-<input id="vb" type="number" min="0" step="0.01" value="5912.60">
-<small>Valor sugerido, editável por cada agente.</small>
-</div>
+      <div class="campo">
+        <label for="posse">Data de posse</label>
+        <input id="posse" type="text" inputmode="numeric"
+          placeholder="DD/MM/AAAA" maxlength="10" value="17/05/2010">
+        <small>Digite a data, por exemplo: 17/05/2010.</small>
+      </div>
 
-<div class="field">
-<label for="posse">Data de posse</label>
-<input id="posse" type="date" value="2010-05-17">
-</div>
+      <div class="campo">
+        <label for="geef">GEEF (%)</label>
+        <input id="geef" type="number" min="0" step="0.01" value="15">
+      </div>
 
-<div class="field">
-<label for="gee">GEEF (%)</label>
-<input id="gee" type="number" min="0" value="15" step="0.1">
-</div>
+      <div class="campo">
+        <label for="ita">ITA (%)</label>
+        <input id="ita" type="number" min="0" step="0.01" value="15">
+      </div>
 
-<div class="field">
-<label for="ita">ITA (%)</label>
-<input id="ita" type="number" min="0" value="15" step="0.1">
-</div>
+      <div class="campo">
+        <label for="gat1">GAT etapa 1 (%)</label>
+        <input id="gat1" type="number" min="0" step="0.01" value="50">
+      </div>
 
-<div class="field">
-<label for="gat1">GAT etapa 1 (%)</label>
-<input id="gat1" type="number" min="0" value="50" step="0.1">
-</div>
+      <div class="campo">
+        <label for="gat2">GAT etapa 2 (%)</label>
+        <input id="gat2" type="number" min="0" step="0.01" value="75">
+      </div>
 
-<div class="field">
-<label for="gat2">GAT etapa 2 (%)</label>
-<input id="gat2" type="number" min="0" value="75" step="0.1">
-</div>
+      <div class="campo">
+        <label for="gat3">GAT etapa 3 (%)</label>
+        <input id="gat3" type="number" min="0" step="0.01" value="100">
+      </div>
 
-<div class="field">
-<label for="gat3">GAT etapa 3 (%)</label>
-<input id="gat3" type="number" min="0" value="100" step="0.1">
-</div>
+      <div class="campo">
+        <label for="anu">Anuênio atual (%)</label>
+        <input id="anu" type="number" min="0" step="0.01" value="16">
+        <small>A projeção soma 1 ponto percentual por aniversário de posse posterior a 15/10/2026.</small>
+      </div>
 
-<div class="field">
-<label for="anuAtual">Anuênio atual (% do VB)</label>
-<input id="anuAtual" type="number" min="0" value="16" step="1">
-<small>A projeção acrescenta 1 ponto percentual por aniversário futuro de posse, como hipótese de simulação.</small>
-</div>
+      <div class="campo">
+        <label for="risco">Risco de vida (% do VB)</label>
+        <input id="risco" type="number" min="0" step="0.01" value="40">
+      </div>
 
-<div class="field">
-<label for="risco">Risco de vida (% do VB)</label>
-<input id="risco" type="number" min="0" value="0" step="0.1">
-<small>Deixe 0 se já estiver incorporado ao vencimento-base informado.</small>
-</div>
+      <div class="campo">
+        <label for="promocao">Promoção / vantagem fixa (% do VB)</label>
+        <input id="promocao" type="number" min="0" step="0.01" value="0">
+      </div>
 
-<div class="field">
-<label for="promocao">Promoção / vantagem fixa (% do VB)</label>
-<input id="promocao" type="number" min="0" value="0" step="0.1">
-</div>
+      <div class="campo">
+        <label for="progressao">Progressão adicional (% do VB)</label>
+        <input id="progressao" type="number" min="0" step="0.01" value="0">
+      </div>
+    </div>
+  </section>
 
-<div class="field">
-<label for="progressao">Progressão adicional (% do VB)</label>
-<input id="progressao" type="number" min="0" value="0" step="0.1">
-</div>
+  <section class="secao">
+    <h2>2. Etapas e parâmetros</h2>
+    <div class="grade">
+      <div class="campo">
+        <label for="inflacao27">Inflação aplicada em 2027 (%)</label>
+        <input id="inflacao27" type="number" min="-100" step="0.01" value="4">
+      </div>
 
-</div>
-</section>
+      <div class="campo">
+        <label for="inflacao28">Inflação adicional em 2028 (%)</label>
+        <input id="inflacao28" type="number" min="-100" step="0.01" value="4">
+      </div>
 
-<section class="card">
-<h2>2. Etapas e parâmetros</h2>
-<div class="grid">
+      <div class="campo">
+        <label for="etapa">Etapa usada para horas e descontos</label>
+        <select id="etapa">
+          <option value="0">Março/2027 — GAT etapa 1</option>
+          <option value="1">Fevereiro/2028 — GAT etapa 2</option>
+          <option value="2">Julho/2028 — GAT etapa 3</option>
+        </select>
+        <small>Ao trocar a etapa, os valores-hora, bruto, descontos e líquido são recalculados.</small>
+      </div>
 
-<div class="field">
-<label for="inflacao27">Reajuste aplicado em 2027 (%)</label>
-<input id="inflacao27" type="number" min="0" value="4" step="0.1">
-</div>
+      <div class="campo">
+        <label for="divisor">Divisor da jornada</label>
+        <select id="divisor">
+          <option value="240">240 horas — jornada atual informada</option>
+          <option value="180">180 horas — cenário proposto</option>
+        </select>
+      </div>
 
-<div class="field">
-<label for="inflacao28">Reajuste adicional em 2028 (%)</label>
-<input id="inflacao28" type="number" min="0" value="4" step="0.1">
-</div>
+      <div class="campo">
+        <label for="noturno">Adicional noturno (%)</label>
+        <input id="noturno" type="number" min="0" step="0.01" value="20">
+      </div>
 
-<div class="field">
-<label for="etapaCalculo">Etapa usada para horas e descontos</label>
-<select id="etapaCalculo">
-<option value="0">Março/2027 — GAT etapa 1</option>
-<option value="1">Fevereiro/2028 — GAT etapa 2</option>
-<option value="2" selected>Julho/2028 — GAT etapa 3</option>
-</select>
-<small>Ao trocar a etapa, os valores-hora, bruto, descontos e líquido são recalculados.</small>
-</div>
+      <div class="campo">
+        <label for="extraDia">Horas extras diurnas/mês</label>
+        <input id="extraDia" type="number" min="0" step="0.01" value="0">
+      </div>
 
-<div class="field">
-<label for="divisor">Divisor da jornada</label>
-<select id="divisor">
-<option value="240">240 horas — jornada atual informada</option>
-<option value="180" selected>180 horas — cenário proposto</option>
-</select>
-</div>
+      <div class="campo">
+        <label for="extraNoite">Horas extras noturnas/mês</label>
+        <input id="extraNoite" type="number" min="0" step="0.01" value="0">
+      </div>
 
-<div class="field">
-<label for="adn">Adicional noturno (%)</label>
-<input id="adn" type="number" min="0" value="20" step="1">
-</div>
+      <div class="campo">
+        <label for="horasNoite">Horas noturnas normais/mês</label>
+        <input id="horasNoite" type="number" min="0" step="0.01" value="0">
+      </div>
 
-<div class="field">
-<label for="he50">Horas extras diurnas por mês</label>
-<input id="he50" type="number" min="0" value="0" step="0.5">
-</div>
+      <div class="campo">
+        <label for="familia">Salário-família (R$)</label>
+        <input id="familia" type="number" min="0" step="0.01" value="8.13">
+      </div>
 
-<div class="field">
-<label for="hen">Horas extras noturnas por mês</label>
-<input id="hen" type="number" min="0" value="0" step="0.5">
-</div>
+      <div class="campo">
+        <label for="prev">IPM Previdência (%)</label>
+        <input id="prev" type="number" min="0" step="0.01" value="14">
+      </div>
 
-<div class="field">
-<label for="hn">Horas noturnas normais por mês</label>
-<input id="hn" type="number" min="0" value="0" step="0.5">
-</div>
+      <div class="campo">
+        <label for="saude">IPM Saúde (%)</label>
+        <input id="saude" type="number" min="0" step="0.01" value="2">
+      </div>
 
-<div class="field">
-<label for="familia">Salário-família (R$)</label>
-<input id="familia" type="number" min="0" value="8.13" step="0.01">
-</div>
+      <div class="campo">
+        <label for="sindifort">Sindifort (%)</label>
+        <input id="sindifort" type="number" min="0" step="0.01" value="2">
+      </div>
 
-<div class="field">
-<label for="prev">IPM Previdência (%)</label>
-<input id="prev" type="number" min="0" value="14" step="0.1">
-</div>
+      <div class="campo">
+        <label for="outros">Outros descontos fixos (R$)</label>
+        <input id="outros" type="number" min="0" step="0.01" value="0">
+      </div>
 
-<div class="field">
-<label for="saude">IPM Saúde (%)</label>
-<input id="saude" type="number" min="0" value="2" step="0.1">
-</div>
+      <div class="campo">
+        <label for="dependentes">Dependentes para IRRF</label>
+        <input id="dependentes" type="number" min="0" step="1" value="0">
+      </div>
+    </div>
 
-<div class="field">
-<label for="sindifort">Sindifort (% do VB)</label>
-<input id="sindifort" type="number" min="0" value="2" step="0.1">
-</div>
+    <p class="nota">
+      A etapa de 2027 usa VB × (1 + inflação 2027). A etapa de 2028 aplica a inflação adicional sobre o VB de 2027.
+    </p>
 
-<div class="field">
-<label for="outrosDescontos">Outros descontos fixos (R$)</label>
-<input id="outrosDescontos" type="number" min="0" value="0" step="0.01">
-</div>
+    <div class="acoes">
+      <button class="principal" id="calcular" type="button">Calcular simulação</button>
+      <button class="secundario" id="restaurar" type="button">Restaurar valores sugeridos</button>
+    </div>
+    <div id="mensagem" class="erro" role="alert"></div>
+  </section>
 
-<div class="field">
-<label for="dependentesIR">Dependentes para IRRF</label>
-<input id="dependentesIR" type="number" min="0" max="20" value="0" step="1">
-</div>
+  <section class="secao">
+    <h2>3. Resultado por etapa</h2>
+    <div class="tabela-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Março/2027</th>
+            <th>Fevereiro/2028</th>
+            <th>Julho/2028</th>
+          </tr>
+        </thead>
+        <tbody id="corpoEtapas">
+          <tr><td colspan="4">Preencha os dados e toque em Calcular simulação.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-</div>
+  <section class="secao">
+    <h2>4. Valores-hora e extras</h2>
+    <div id="tituloEtapa" class="resultado-destaque">
+      Selecione uma etapa e calcule a simulação.
+    </div>
+    <div class="tabela-wrap">
+      <table>
+        <thead>
+          <tr><th>Item</th><th>Valor</th></tr>
+        </thead>
+        <tbody id="corpoHoras">
+          <tr><td colspan="2">Os valores serão exibidos após o cálculo.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="nota">
+      A base horária usa a remuneração regular da etapa selecionada, dividida pelo divisor. O adicional noturno normal é calculado somente como adicional por hora × quantidade de horas, sem somar novamente a hora normal. As horas extras diurnas usam adicional de 50%; as extras noturnas usam 50% mais o adicional noturno informado.
+    </p>
+    <p class="nota">
+      IPM Previdência: percentual aplicado à remuneração regular da etapa, sem horas extras, adicional noturno e salário-família. IPM Saúde: percentual aplicado ao bruto estimado, excluindo salário-família. Sindifort: percentual aplicado ao vencimento-base da etapa.
+    </p>
+    <p class="nota">
+      IRRF conforme a regra solicitada nesta simulação: bruto − salário-família − dedução de R$ 189,59 por dependente − IPM Previdência; aplicar 27,5% e subtrair parcela a deduzir de R$ 908,73. A estimativa não substitui a conferência das regras oficiais aplicáveis.
+    </p>
+  </section>
 
-<p class="hint">
-Hipótese de reajuste: etapa 1 usa o VB de referência com o reajuste de 2027; etapa 2 usa o VB reajustado em 2027 e a aplicação adicional de 2028; etapa 3 mantém a base reajustada de 2028 e altera a GAT. Confirme o calendário e os percentuais da proposta.
-</p>
-
-<div class="actions">
-<button class="primary" id="calcular" type="button">Calcular simulação</button>
-<button class="secondary" id="restaurar" type="button">Restaurar valores sugeridos</button>
-</div>
-</section>
-
-<section class="card">
-<h2>3. Resultado por etapa</h2>
-<div class="tablewrap">
-<table>
-<thead>
-<tr><th>Item</th><th>Março/2027</th><th>Fevereiro/2028</th><th>Julho/2028</th></tr>
-</thead>
-<tbody id="resultado"></tbody>
-</table>
-</div>
-</section>
-
-<section class="card">
-<h2>4. Valores-hora, extras e descontos da etapa selecionada</h2>
-<div id="horas" class="metrics"></div>
-<p class="hint">
-O adicional noturno normal é calculado somente como adicional por hora multiplicado pelas horas informadas, sem somar novamente a hora normal. As horas extras diurnas usam adicional de 50%; as extras noturnas usam 50% mais o adicional noturno informado. Previdência é estimada sobre a remuneração regular, sem extras, adicional noturno ou salário-família. Saúde é estimada sobre o bruto excluindo salário-família. Sindifort é calculado sobre o vencimento-base da etapa. O IRRF usa a regra de simulação solicitada: bruto menos salário-família, dedução por dependentes e Previdência; depois 27,5% menos R$ 908,73. Confirme as bases e regras oficiais aplicáveis.
-</p>
-</section>
-
-<footer>
-Simulador independente para estimativas. Os resultados dependem dos dados inseridos e das regras adotadas; não substituem contracheque ou norma oficial. Os valores são calculados neste navegador e não são enviados ao repositório.
-</footer>
+  <footer>
+    Simulador independente para estimativas. Os resultados dependem dos dados inseridos e das regras adotadas; não substituem contracheque ou norma oficial.
+  </footer>
 </main>
 
 <script>
 "use strict";
 
 const $ = id => document.getElementById(id);
-const n = id => {
-  const value = Number($(id).value);
-  return Number.isFinite(value) && value > 0 ? value : 0;
-};
-const brl = value => new Intl.NumberFormat("pt-BR", {
-  style:"currency", currency:"BRL"
-}).format(value);
-const pct = (base, percent) => base * percent / 100;
-const pformat = value => new Intl.NumberFormat("pt-BR", {
-  maximumFractionDigits:2
-}).format(value) + "%";
 
-function calcularEtapas() {
-  const vb = n("vb");
-  const inflacao27 = n("inflacao27") / 100;
-  const inflacao28 = n("inflacao28") / 100;
-  const vb2027 = vb * (1 + inflacao27);
-  const vb2028 = vb2027 * (1 + inflacao28);
-  const posse = $("posse").value;
-  const anuAtual = n("anuAtual");
-
-  const etapas = [
-    {vb:vb2027, ano:2027, mes:3, gat:n("gat1"), nome:"Março/2027"},
-    {vb:vb2028, ano:2028, mes:2, gat:n("gat2"), nome:"Fevereiro/2028"},
-    {vb:vb2028, ano:2028, mes:7, gat:n("gat3"), nome:"Julho/2028"}
-  ];
-
-  return etapas.map((etapa, indice) => {
-    let aumentosAnuenio = 0;
-    if (posse) {
-      const dataPosse = new Date(posse + "T12:00:00");
-      if (!Number.isNaN(dataPosse.getTime())) {
-        for (let ano = 2027; ano <= etapa.ano; ano++) {
-          const aniversario = new Date(
-            ano, dataPosse.getMonth(), dataPosse.getDate(), 12
-          );
-          const dataEtapa = new Date(etapa.ano, etapa.mes - 1, 1, 12);
-          const limite = new Date(2026, 9, 15, 12);
-          if (aniversario > limite && aniversario <= dataEtapa) {
-            aumentosAnuenio++;
-          }
-        }
-      }
-    }
-
-    const percentualAnuenio = anuAtual + aumentosAnuenio;
-    const gee = pct(etapa.vb, n("gee"));
-    const ita = pct(etapa.vb, n("ita"));
-    const gat = pct(etapa.vb, etapa.gat);
-    const anuenio = pct(etapa.vb, percentualAnuenio);
-    const risco = pct(etapa.vb, n("risco"));
-    const promocao = pct(etapa.vb, n("promocao"));
-    const progressao = pct(etapa.vb, n("progressao"));
-
-    const regular = etapa.vb + gee + ita + gat + anuenio +
-      risco + promocao + progressao;
-
-    return {
-      ...etapa, indice, percentualAnuenio, gee, ita, gat, anuenio,
-      risco, promocao, progressao, regular
-    };
-  });
-}
-
-function calcularTudo() {
-  const etapas = calcularEtapas();
-  const salarioFamilia = n("familia");
-  const divisor = Math.max(1, n("divisor"));
-  const adicionalNoturno = n("adn") / 100;
-  const horasDiurnas = n("he50");
-  const horasNoturnas = n("hn");
-  const horasExtrasNoturnas = n("hen");
-  const percentualPrev = n("prev") / 100;
-  const percentualSaude = n("saude") / 100;
-  const percentualSindifort = n("sindifort") / 100;
-  const outrosDescontos = n("outrosDescontos");
-  const dependentes = Math.floor(n("dependentesIR"));
-  const deducaoDependente = dependentes * 189.59;
-
-  return etapas.map(etapa => {
-    const horaNormal = etapa.regular / divisor;
-    const adicionalNoturnoHora = horaNormal * adicionalNoturno;
-    const horaNoturna = horaNormal + adicionalNoturnoHora;
-    const horaExtraDiurna = horaNormal * 1.5;
-    const horaExtraNoturna = horaNormal * 1.5 * (1 + adicionalNoturno);
-
-    const totalExtrasDiurnas = horaExtraDiurna * horasDiurnas;
-    const totalAdicionalNoturno = adicionalNoturnoHora * horasNoturnas;
-    const totalExtrasNoturnas = horaExtraNoturna * horasExtrasNoturnas;
-
-    const bruto = etapa.regular + salarioFamilia + totalExtrasDiurnas +
-      totalAdicionalNoturno + totalExtrasNoturnas;
-
-    const basePrevidencia = etapa.regular;
-    const previdencia = basePrevidencia * percentualPrev;
-    const baseSaude = Math.max(0, bruto - salarioFamilia);
-    const saude = baseSaude * percentualSaude;
-    const sindifort = etapa.vb * percentualSindifort;
-
-    const baseIRRF = Math.max(
-      0, bruto - salarioFamilia - deducaoDependente - previdencia
-    );
-    const irrf = Math.max(0, baseIRRF * 0.275 - 908.73);
-
-    const totalDescontos = previdencia + saude + sindifort +
-      outrosDescontos + irrf;
-    const liquido = bruto - totalDescontos;
-
-    return {
-      ...etapa, divisor, horaNormal, adicionalNoturnoHora, horaNoturna,
-      horaExtraDiurna, horaExtraNoturna, horasDiurnas, horasNoturnas,
-      horasExtrasNoturnas, totalExtrasDiurnas, totalAdicionalNoturno,
-      totalExtrasNoturnas, salarioFamilia, bruto, basePrevidencia,
-      previdencia, baseSaude, saude, sindifort, dependentes,
-      deducaoDependente, baseIRRF, irrf, outrosDescontos,
-      totalDescontos, liquido
-    };
-  });
-}
-
-function preencherTabela(etapas) {
-  const linhas = [
-    ["Vencimento-base", "vb"],
-    ["GEEF", "gee"],
-    ["ITA", "ita"],
-    ["GAT", "gat"],
-    ["Anuênio", "anuenio"],
-    ["Anuênio (%)", "percentualAnuenio"],
-    ["Risco de vida", "risco"],
-    ["Promoção / vantagem fixa", "promocao"],
-    ["Progressão adicional", "progressao"],
-    ["Remuneração regular estimada", "regular"],
-    ["Salário-família", "salarioFamilia"],
-    ["Total bruto estimado", "bruto"]
-  ];
-
-  $("resultado").innerHTML = linhas.map(([rotulo,chave]) => {
-    const total = ["regular","bruto"].includes(chave);
-    const valores = etapas.map(etapa => {
-      let valor;
-      if (chave === "vb") valor = etapa.vb;
-      else if (chave === "salarioFamilia") valor = etapa.salarioFamilia;
-      else valor = etapa[chave];
-      return `<td>${chave === "percentualAnuenio" ? pformat(valor) : brl(valor)}</td>`;
-    }).join("");
-    return `<tr class="${total ? "total" : ""}"><td>${rotulo}</td>${valores}</tr>`;
-  }).join("");
-}
-
-function preencherHoras(etapa) {
-  const itens = [
-    ["Etapa selecionada", etapa.nome],
-    ["Remuneração regular da etapa", brl(etapa.regular)],
-    ["Divisor mensal de horas", String(etapa.divisor)],
-    ["Hora normal", brl(etapa.horaNormal)],
-    ["Adicional noturno por hora", brl(etapa.adicionalNoturnoHora)],
-    ["Hora noturna com adicional", brl(etapa.horaNoturna)],
-    ["Hora extra diurna (50%)", brl(etapa.horaExtraDiurna)],
-    ["Hora extra noturna (50% + adicional)", brl(etapa.horaExtraNoturna)],
-    ["Quantidade de horas extras diurnas", etapa.horasDiurnas + " h"],
-    ["Total das horas extras diurnas", brl(etapa.totalExtrasDiurnas)],
-    ["Quantidade de horas noturnas normais", etapa.horasNoturnas + " h"],
-    ["Total do adicional noturno normal", brl(etapa.totalAdicionalNoturno)],
-    ["Quantidade de horas extras noturnas", etapa.horasExtrasNoturnas + " h"],
-    ["Total das horas extras noturnas", brl(etapa.totalExtrasNoturnas)],
-    ["Salário-família", brl(etapa.salarioFamilia)],
-    ["TOTAL BRUTO com adicionais e extras", brl(etapa.bruto)],
-    ["Base IPM Previdência", brl(etapa.basePrevidencia)],
-    ["IPM Previdência", brl(etapa.previdencia)],
-    ["Base IPM Saúde", brl(etapa.baseSaude)],
-    ["IPM Saúde", brl(etapa.saude)],
-    ["Base Sindifort (VB)", brl(etapa.vb)],
-    ["Sindifort", brl(etapa.sindifort)],
-    ["Dependentes para IRRF", String(etapa.dependentes)],
-    ["Dedução por dependentes", brl(etapa.deducaoDependente)],
-    ["Base de cálculo do IRRF", brl(etapa.baseIRRF)],
-    ["IRRF: 27,5% menos R$ 908,73", brl(etapa.irrf)],
-    ["Outros descontos fixos", brl(etapa.outrosDescontos)],
-    ["TOTAL DE DESCONTOS", brl(etapa.totalDescontos)],
-    ["SALÁRIO LÍQUIDO ESTIMADO", brl(etapa.liquido)]
-  ];
-
-  $("horas").innerHTML = itens.map(([rotulo,valor],indice) => {
-    const destaque = [15,27,28].includes(indice);
-    return `<div class="metric"${destaque ? ' style="background:#edf5fb;border-color:#9db7ca"' : ""}><span>${rotulo}</span><strong>${valor}</strong></div>`;
-  }).join("");
-}
-
-function calc() {
-  const todas = calcularTudo();
-  const indice = Math.max(0,Math.min(2,Math.floor(n("etapaCalculo"))));
-  preencherTabela(todas);
-  preencherHoras(todas[indice]);
-}
-
-const defaults = {
-  vb:"5912.60", posse:"2010-05-17", gee:"15", ita:"15",
-  gat1:"50", gat2:"75", gat3:"100", anuAtual:"16",
-  risco:"0", promocao:"0", progressao:"0",
-  inflacao27:"4", inflacao28:"4", etapaCalculo:"2",
-  divisor:"180", adn:"20", he50:"0", hen:"0", hn:"0",
-  familia:"8.13", prev:"14", saude:"2", sindifort:"2",
-  outrosDescontos:"0", dependentesIR:"0"
+const padrao = {
+  vb: "5912.60",
+  posse: "17/05/2010",
+  geef: "15",
+  ita: "15",
+  gat1: "50",
+  gat2: "75",
+  gat3: "100",
+  anu: "16",
+  risco: "40",
+  promocao: "0",
+  progressao: "0",
+  inflacao27: "4",
+  inflacao28: "4",
+  etapa: "0",
+  divisor: "240",
+  noturno: "20",
+  extraDia: "0",
+  extraNoite: "0",
+  horasNoite: "0",
+  familia: "8.13",
+  prev: "14",
+  saude: "2",
+  sindifort: "2",
+  outros: "0",
+  dependentes: "0"
 };
 
-$("calcular").addEventListener("click",calc);
-$("restaurar").addEventListener("click",() => {
-  for (const [id,valor] of Object.entries(defaults)) {
-    $(id).value = valor;
+const nomesEtapas = [
+  "Março/2027 — GAT etapa 1",
+  "Fevereiro/2028 — GAT etapa 2",
+  "Julho/2028 — GAT etapa 3"
+];
+
+const datasEtapas = [
+  new Date(2027, 2, 1),
+  new Date(2028, 1, 1),
+  new Date(2028, 6, 1)
+];
+
+const dinheiro = valor => (Number(valor) || 0).toLocaleString("pt-BR", {
+  style: "currency",
+  currency: "BRL"
+});
+
+const numero = valor => (Number(valor) || 0).toLocaleString("pt-BR", {
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2
+});
+
+function valor(id) {
+  const n = Number($(id).value);
+  return Number.isFinite(n) ? n : 0;
+}
+
+function percentual(id) {
+  return valor(id) / 100;
+}
+
+function lerDataPosse() {
+  const texto = $("posse").value.trim();
+  const partes = texto.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+
+  if (!partes) {
+    throw new Error("Digite a data de posse no formato DD/MM/AAAA. Exemplo: 17/05/2010.");
   }
-  calc();
+
+  const dia = Number(partes[1]);
+  const mes = Number(partes[2]);
+  const ano = Number(partes[3]);
+  const data = new Date(ano, mes - 1, dia);
+
+  if (
+    data.getFullYear() !== ano ||
+    data.getMonth() !== mes - 1 ||
+    data.getDate() !== dia
+  ) {
+    throw new Error("A data de posse informada não é válida.");
+  }
+
+  return data;
+}
+
+function somarAnos(data, anos) {
+  const ano = data.getFullYear() + anos;
+  const mes = data.getMonth();
+  const dia = data.getDate();
+  const ultimoDia = new Date(ano, mes + 1, 0).getDate();
+  return new Date(ano, mes, Math.min(dia, ultimoDia));
+}
+
+function anuênioNaEtapa(posse, dataEtapa) {
+  const dataCorte = new Date(2026, 9, 15);
+  let acrescimos = 0;
+
+  for (let anos = 1; anos <= 100; anos++) {
+    const aniversario = somarAnos(posse, anos);
+
+    if (aniversario > dataEtapa) break;
+
+    if (aniversario > dataCorte) {
+      acrescimos++;
+    }
+  }
+
+  return Math.max(0, valor("anu") + acrescimos);
+}
+
+function validarCampos() {
+  const camposPercentuais = [
+    "geef", "ita", "gat1", "gat2", "gat3", "anu", "risco",
+    "promocao", "progressao", "prev", "saude", "sindifort", "noturno"
+  ];
+
+  for (const id of camposPercentuais) {
+    if (valor(id) < 0) {
+      throw new Error("Os percentuais não podem ser negativos.");
+    }
+  }
+
+  const camposNaoNegativos = [
+    "vb", "extraDia", "extraNoite", "horasNoite",
+    "familia", "outros", "dependentes"
+  ];
+
+  for (const id of camposNaoNegativos) {
+    if (valor(id) < 0) {
+      throw new Error("Quantidades e valores não podem ser negativos.");
+    }
+  }
+
+  if (!Number.isInteger(valor("dependentes"))) {
+    throw new Error("Informe um número inteiro de dependentes.");
+  }
+
+  if (valor("divisor") <= 0) {
+    throw new Error("O divisor da jornada deve ser maior que zero.");
+  }
+}
+
+function calcularEtapa(indice, posse) {
+  const vbAtual = valor("vb");
+  const inflacao27 = percentual("inflacao27");
+  const inflacao28 = percentual("inflacao28");
+
+  const vb2027 = vbAtual * (1 + inflacao27);
+  const vb2028 = vb2027 * (1 + inflacao28);
+
+  const vbEtapa = indice === 0 ? vb2027 : vb2028;
+  const gatId = ["gat1", "gat2", "gat3"][indice];
+  const anuPercentual = anuênioNaEtapa(posse, datasEtapas[indice]);
+
+  const vencimento = vbEtapa;
+  const geef = vbEtapa * percentual("geef");
+  const ita = vbEtapa * percentual("ita");
+  const gat = vbEtapa * percentual(gatId);
+  const anu = vbEtapa * anuPercentual / 100;
+  const risco = vbEtapa * percentual("risco");
+  const promocao = vbEtapa * percentual("promocao");
+  const progressao = vbEtapa * percentual("progressao");
+
+  const regular = vencimento + geef + ita + gat + anu +
+    risco + promocao + progressao;
+
+  const divisor = valor("divisor");
+  const valorHora = regular / divisor;
+  const adicionalNoturnoHora = valorHora * percentual("noturno");
+  const horaNoturnaComAdicional = valorHora + adicionalNoturnoHora;
+  const horaExtraDiurna = valorHora * 1.5;
+  const horaExtraNoturna = valorHora *
+    (1 + 0.5 + percentual("noturno"));
+
+  const totalExtraDiurna = horaExtraDiurna * valor("extraDia");
+  const totalExtraNoturna = horaExtraNoturna * valor("extraNoite");
+  const totalAdicionalNoturno = adicionalNoturnoHora * valor("horasNoite");
+  const familia = valor("familia");
+
+  const bruto = regular + totalExtraDiurna + totalExtraNoturna +
+    totalAdicionalNoturno + familia;
+
+  const previdencia = regular * percentual("prev");
+  const ipmSaude = Math.max(0, bruto - familia) * percentual("saude");
+  const sindifort = vbEtapa * percentual("sindifort");
+
+  const baseIRRF = Math.max(
+    0,
+    bruto - familia - (189.59 * valor("dependentes")) - previdencia
+  );
+
+  const irrf = Math.max(0, baseIRRF * 0.275 - 908.73);
+  const outros = valor("outros");
+  const descontos = previdencia + ipmSaude + sindifort + irrf + outros;
+  const liquido = bruto - descontos;
+
+  return {
+    nome: nomesEtapas[indice],
+    vb: vbEtapa,
+    geef, ita, gat, anu, anuPercentual, risco, promocao, progressao,
+    regular, valorHora, adicionalNoturnoHora, horaNoturnaComAdicional,
+    horaExtraDiurna, horaExtraNoturna, totalExtraDiurna,
+    totalExtraNoturna, totalAdicionalNoturno, familia, bruto,
+    previdencia, ipmSaude, sindifort, baseIRRF, irrf, outros,
+    descontos, liquido
+  };
+}
+
+function linha(titulo, valores, classe = "") {
+  return `<tr class="${classe}">
+    <td>${titulo}</td>
+    ${valores.map(v => `<td>${v}</td>`).join("")}
+  </tr>`;
+}
+
+function mostrarResultados(resultados) {
+  const itens = [
+    ["Vencimento-base projetado", r => dinheiro(r.vb)],
+    ["GEEF", r => dinheiro(r.geef)],
+    ["ITA", r => dinheiro(r.ita)],
+    ["GAT", r => dinheiro(r.gat)],
+    ["Anuênio (%)", r => numero(r.anuPercentual) + "%"],
+    ["Valor do anuênio", r => dinheiro(r.anu)],
+    ["Risco de vida", r => dinheiro(r.risco)],
+    ["Promoção / vantagem fixa", r => dinheiro(r.promocao)],
+    ["Progressão adicional", r => dinheiro(r.progressao)],
+    ["Remuneração regular", r => dinheiro(r.regular)],
+    ["Horas extras diurnas", r => dinheiro(r.totalExtraDiurna)],
+    ["Horas extras noturnas", r => dinheiro(r.totalExtraNoturna)],
+    ["Adicional noturno normal", r => dinheiro(r.totalAdicionalNoturno)],
+    ["Salário-família", r => dinheiro(r.familia)],
+    ["Bruto estimado", r => dinheiro(r.bruto)],
+    ["IPM Previdência", r => dinheiro(r.previdencia)],
+    ["IPM Saúde", r => dinheiro(r.ipmSaude)],
+    ["Sindifort", r => dinheiro(r.sindifort)],
+    ["IRRF estimado", r => dinheiro(r.irrf)],
+    ["Outros descontos", r => dinheiro(r.outros)],
+    ["Total de descontos", r => dinheiro(r.descontos)],
+    ["Líquido estimado", r => dinheiro(r.liquido)]
+  ];
+
+  $("corpoEtapas").innerHTML = itens.map(([nome, fn]) => {
+    let classe = "";
+    if (nome === "Bruto estimado") classe = "total";
+    if (nome === "Total de descontos") classe = "total";
+    if (nome === "Líquido estimado") classe = "liquido";
+    return linha(nome, resultados.map(fn), classe);
+  }).join("");
+
+  const selecionado = resultados[Number($("etapa").value)];
+  $("tituloEtapa").innerHTML =
+    `<strong>${selecionado.nome}</strong><br>` +
+    `Remuneração regular: <strong>${dinheiro(selecionado.regular)}</strong>`;
+
+  const itensHoras = [
+    ["Divisor da jornada", numero(valor("divisor")) + " horas"],
+    ["Valor da hora normal", dinheiro(selecionado.valorHora)],
+    ["Adicional noturno por hora", dinheiro(selecionado.adicionalNoturnoHora)],
+    ["Hora noturna com adicional", dinheiro(selecionado.horaNoturnaComAdicional)],
+    ["Hora extra diurna (50%)", dinheiro(selecionado.horaExtraDiurna)],
+    ["Hora extra noturna (50% + adicional noturno)", dinheiro(selecionado.horaExtraNoturna)],
+    ["Quantidade de extras diurnas", numero(valor("extraDia")) + " h"],
+    ["Total de extras diurnas", dinheiro(selecionado.totalExtraDiurna)],
+    ["Quantidade de extras noturnas", numero(valor("extraNoite")) + " h"],
+    ["Total de extras noturnas", dinheiro(selecionado.totalExtraNoturna)],
+    ["Quantidade de horas noturnas normais", numero(valor("horasNoite")) + " h"],
+    ["Total do adicional noturno normal", dinheiro(selecionado.totalAdicionalNoturno)],
+    ["Bruto estimado", dinheiro(selecionado.bruto)],
+    ["Base estimada do IRRF", dinheiro(selecionado.baseIRRF)],
+    ["Total de descontos", dinheiro(selecionado.descontos)],
+    ["Líquido estimado", dinheiro(selecionado.liquido)]
+  ];
+
+  $("corpoHoras").innerHTML = itensHoras.map(([nome, v]) => {
+    const classe = nome === "Líquido estimado" ? "liquido" :
+      nome === "Bruto estimado" ? "total" : "";
+    return `<tr class="${classe}"><td>${nome}</td><td>${v}</td></tr>`;
+  }).join("");
+}
+
+function calcular() {
+  $("mensagem").textContent = "";
+
+  try {
+    validarCampos();
+    const posse = lerDataPosse();
+    const resultados = [0, 1, 2].map(i => calcularEtapa(i, posse));
+    mostrarResultados(resultados);
+  } catch (erro) {
+    $("mensagem").textContent = erro.message || "Não foi possível calcular. Confira os dados.";
+  }
+}
+
+function restaurar() {
+  for (const [id, v] of Object.entries(padrao)) {
+    $(id).value = v;
+  }
+  $("mensagem").textContent = "";
+  calcular();
+}
+
+$("posse").addEventListener("input", function() {
+  let texto = this.value.replace(/\D/g, "").slice(0, 8);
+  if (texto.length > 4) {
+    texto = texto.slice(0, 2) + "/" + texto.slice(2, 4) + "/" + texto.slice(4);
+  } else if (texto.length > 2) {
+    texto = texto.slice(0, 2) + "/" + texto.slice(2);
+  }
+  this.value = texto;
 });
-document.querySelectorAll("input,select").forEach(campo => {
-  campo.addEventListener("input",calc);
-  campo.addEventListener("change",calc);
-});
-calc();
+
+$("calcular").addEventListener("click", calcular);
+$("restaurar").addEventListener("click", restaurar);
+$("etapa").addEventListener("change", calcular);
+
+calcular();
 </script>
 </body>
 </html>
-
