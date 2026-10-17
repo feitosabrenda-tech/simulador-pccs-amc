@@ -12,7 +12,7 @@ header{background:#173b63;color:white;text-align:center;padding:22px 12px}
 header h1{margin:0 0 6px;font-size:25px}
 main{max-width:1100px;margin:auto;padding:12px}
 .aviso{background:#fff4d6;border:1px solid #e4ca79;border-radius:8px;padding:12px;margin-bottom:14px}
-.secao{background:#fff;border:1px solid #d5dce5;border-radius:10px;padding:15px;margin-bottom:15px}
+.secao{background:white;border:1px solid #d5dce5;border-radius:10px;padding:15px;margin-bottom:15px}
 h2{font-size:20px;color:#173b63;margin-top:0}
 .grade{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}
 .campo{min-width:0}
@@ -45,75 +45,80 @@ footer{text-align:center;padding:18px;color:#596579;font-size:13px}
 
 <main>
 <div class="aviso">
-<strong>Atenção:</strong> simulador estimativo. Não representa tabela oficial nem proposta aprovada. Confirme regras e percentuais em fontes oficiais.
+<strong>Atenção:</strong> simulador estimativo. Não representa tabela oficial nem proposta aprovada. Confirme as regras e os percentuais em fontes oficiais.
 </div>
 
 <section class="secao">
-<h2>1. Identificação e vencimento-base</h2>
+<h2>1. Dados individuais</h2>
 <div class="grade">
 <div class="campo">
 <label for="turma">Turma de ingresso</label>
 <select id="turma">
-<option value="2002">Turma 2002 — duas progressões de 2%</option>
-<option value="2010">Turma 2010 — uma progressão de 2%</option>
-<option value="2024">Turma 2024 em diante — sem progressão adicional</option>
+<option value="2002">Turma 2002</option>
+<option value="2010">Turma 2010</option>
+<option value="2024">Turma 2024 em diante</option>
 </select>
+<small>Seleção para identificação da turma. As progressões já incorporadas ao VB não serão somadas novamente.</small>
 </div>
 
 <div class="campo">
 <label for="posse">Data de posse</label>
 <input id="posse" type="text" inputmode="numeric" maxlength="10" placeholder="DD/MM/AAAA">
-<small>Digite a data de posse manualmente.</small>
+<small>Digite a data no formato DD/MM/AAAA.</small>
 </div>
 
 <div class="campo">
-<label for="vb">Vencimento-base atual (R$)</label>
-<input id="vb" type="number" min="0" step="0.01" placeholder="Deixe vazio para estimar">
-<small>Se souber o VB, informe aqui. Caso contrário, o sistema estima pelos componentes abaixo.</small>
+<label for="vb">Vencimento-base atual já integrado (R$)</label>
+<input id="vb" type="number" min="0.01" step="0.01" placeholder="Digite seu vencimento-base">
+<small>Informe o VB já integrado conforme o novo PCCS, incluindo as incorporações aplicáveis ao seu caso.</small>
 </div>
 
 <div class="campo">
-<label for="especifica">Gratificação específica atual — 100% do VB (R$)</label>
-<input id="especifica" type="number" min="0" step="0.01" placeholder="Valor do contracheque">
+<label for="geef">GEEF (%)</label>
+<input id="geef" type="number" min="0" step="0.01" value="15">
 </div>
 
 <div class="campo">
-<label for="riscoAtual">Risco de vida atual — 40% do VB (R$)</label>
-<input id="riscoAtual" type="number" min="0" step="0.01" placeholder="Valor do contracheque">
+<label for="ita">ITA (%)</label>
+<input id="ita" type="number" min="0" step="0.01" value="15">
 </div>
 
 <div class="campo">
-<label for="grat25">Gratificação atual — 25% do VB (R$)</label>
-<input id="grat25" type="number" min="0" step="0.01" placeholder="Valor do contracheque">
-</div>
+<label for="gat1">GAT etapa 1 (%)</label>
+<input id="gat1" type="number" min="0" step="0.01" value="50">
 </div>
 
-<div id="resultadoVB" class="destaque">
-O vencimento-base estimado aparecerá após preencher os dados e calcular.
+<div class="campo">
+<label for="gat2">GAT etapa 2 (%)</label>
+<input id="gat2" type="number" min="0" step="0.01" value="75">
 </div>
-<div class="nota">
-Estimativa automática: gratificação específica ÷ 1; risco de vida ÷ 0,40; gratificação de 25% ÷ 0,25. O sistema utiliza a média dos valores de VB inferidos a partir dos componentes informados. Se o VB for preenchido diretamente, esse valor terá prioridade.
+
+<div class="campo">
+<label for="gat3">GAT etapa 3 (%)</label>
+<input id="gat3" type="number" min="0" step="0.01" value="100">
+</div>
+
+<div class="campo">
+<label for="anu">Anuênio atual (%)</label>
+<input id="anu" type="number" min="0" step="0.01" value="16">
+<small>A projeção considera aniversários de posse posteriores a 15/10/2026.</small>
+</div>
 </div>
 </section>
 
 <section class="secao">
-<h2>2. Demais componentes da remuneração</h2>
+<h2>2. Etapas e parâmetros</h2>
 <div class="grade">
-<div class="campo"><label for="geef">GEEF (%)</label><input id="geef" type="number" min="0" step="0.01" value="15"></div>
-<div class="campo"><label for="ita">ITA (%)</label><input id="ita" type="number" min="0" step="0.01" value="15"></div>
-<div class="campo"><label for="gat1">GAT etapa 1 (%)</label><input id="gat1" type="number" min="0" step="0.01" value="50"></div>
-<div class="campo"><label for="gat2">GAT etapa 2 (%)</label><input id="gat2" type="number" min="0" step="0.01" value="75"></div>
-<div class="campo"><label for="gat3">GAT etapa 3 (%)</label><input id="gat3" type="number" min="0" step="0.01" value="100"></div>
-<div class="campo"><label for="anu">Anuênio atual (%)</label><input id="anu" type="number" min="0" step="0.01" value="16"></div>
+<div class="campo">
+<label for="inflacao27">Inflação aplicada em 2027 (%)</label>
+<input id="inflacao27" type="number" min="-99.99" step="0.01" value="4">
 </div>
-<p class="nota">As progressões por turma são automáticas: turma 2002 = 4%; turma 2010 = 2%; turma 2024 em diante = 0%. O percentual é calculado sobre o VB projetado.</p>
-</section>
 
-<section class="secao">
-<h2>3. Etapas e parâmetros</h2>
-<div class="grade">
-<div class="campo"><label for="inflacao27">Inflação aplicada em 2027 (%)</label><input id="inflacao27" type="number" min="-99.99" step="0.01" value="4"></div>
-<div class="campo"><label for="inflacao28">Inflação adicional em 2028 (%)</label><input id="inflacao28" type="number" min="-99.99" step="0.01" value="4"></div>
+<div class="campo">
+<label for="inflacao28">Inflação adicional em 2028 (%)</label>
+<input id="inflacao28" type="number" min="-99.99" step="0.01" value="4">
+</div>
+
 <div class="campo">
 <label for="etapa">Etapa usada para horas e descontos</label>
 <select id="etapa">
@@ -122,6 +127,7 @@ Estimativa automática: gratificação específica ÷ 1; risco de vida ÷ 0,40; 
 <option value="2">Julho/2028 — GAT etapa 3</option>
 </select>
 </div>
+
 <div class="campo">
 <label for="divisor">Divisor da jornada</label>
 <select id="divisor">
@@ -129,212 +135,319 @@ Estimativa automática: gratificação específica ÷ 1; risco de vida ÷ 0,40; 
 <option value="180">180 horas — cenário proposto</option>
 </select>
 </div>
-<div class="campo"><label for="noturno">Adicional noturno (%)</label><input id="noturno" type="number" min="0" step="0.01" value="20"></div>
-<div class="campo"><label for="extraDia">Horas extras diurnas/mês</label><input id="extraDia" type="number" min="0" step="0.01" value="0"></div>
-<div class="campo"><label for="extraNoite">Horas extras noturnas/mês</label><input id="extraNoite" type="number" min="0" step="0.01" value="0"></div>
-<div class="campo"><label for="horasNoite">Horas noturnas normais/mês</label><input id="horasNoite" type="number" min="0" step="0.01" value="0"></div>
-<div class="campo"><label for="familia">Salário-família (R$)</label><input id="familia" type="number" min="0" step="0.01" value="8.13"></div>
-<div class="campo"><label for="prev">IPM Previdência (%)</label><input id="prev" type="number" min="0" step="0.01" value="14"></div>
-<div class="campo"><label for="saude">IPM Saúde (%)</label><input id="saude" type="number" min="0" step="0.01" value="2"></div>
-<div class="campo"><label for="sindifort">Sindifort (%)</label><input id="sindifort" type="number" min="0" step="0.01" value="2"></div>
-<div class="campo"><label for="outros">Outros descontos fixos (R$)</label><input id="outros" type="number" min="0" step="0.01" value="0"></div>
-<div class="campo"><label for="dependentes">Dependentes para IRRF</label><input id="dependentes" type="number" min="0" step="1" value="0"></div>
+
+<div class="campo">
+<label for="noturno">Adicional noturno (%)</label>
+<input id="noturno" type="number" min="0" step="0.01" value="20">
 </div>
-<p class="nota">A etapa de 2027 usa VB × (1 + inflação de 2027). A etapa de 2028 aplica a inflação adicional sobre o VB de 2027. O risco de vida e a gratificação específica são projetados, respectivamente, como 40% e 100% do VB; a gratificação de 25% também é incluída na remuneração regular.</p>
+
+<div class="campo">
+<label for="extraDia">Horas extras diurnas/mês</label>
+<input id="extraDia" type="number" min="0" step="0.01" value="0">
+</div>
+
+<div class="campo">
+<label for="extraNoite">Horas extras noturnas/mês</label>
+<input id="extraNoite" type="number" min="0" step="0.01" value="0">
+</div>
+
+<div class="campo">
+<label for="horasNoite">Horas noturnas normais/mês</label>
+<input id="horasNoite" type="number" min="0" step="0.01" value="0">
+</div>
+
+<div class="campo">
+<label for="familia">Salário-família (R$)</label>
+<input id="familia" type="number" min="0" step="0.01" value="8.13">
+</div>
+
+<div class="campo">
+<label for="prev">IPM Previdência (%)</label>
+<input id="prev" type="number" min="0" step="0.01" value="14">
+</div>
+
+<div class="campo">
+<label for="saude">IPM Saúde (%)</label>
+<input id="saude" type="number" min="0" step="0.01" value="2">
+</div>
+
+<div class="campo">
+<label for="sindifort">Sindifort (%)</label>
+<input id="sindifort" type="number" min="0" step="0.01" value="2">
+</div>
+
+<div class="campo">
+<label for="outros">Outros descontos fixos (R$)</label>
+<input id="outros" type="number" min="0" step="0.01" value="0">
+</div>
+
+<div class="campo">
+<label for="dependentes">Dependentes para IRRF</label>
+<input id="dependentes" type="number" min="0" step="1" value="0">
+</div>
+</div>
+
+<p class="nota">
+A etapa de 2027 usa VB informado × (1 + inflação de 2027). A etapa de 2028 aplica a inflação adicional sobre o VB projetado de 2027. O VB informado é tratado como a base já integrada e não recebe acréscimo automático de progressões por turma.
+</p>
+
 <div class="acoes">
 <button class="principal" id="calcular" type="button">Calcular simulação</button>
-<button class="secundario" id="restaurar" type="button">Restaurar campos</button>
+<button class="secundario" id="restaurar" type="button">Restaurar valores sugeridos</button>
 </div>
 <div id="mensagem" class="erro" role="alert"></div>
 </section>
 
 <section class="secao">
-<h2>4. Resultado por etapa</h2>
+<h2>3. Resultado por etapa</h2>
 <div class="tabela-wrap">
 <table>
-<thead><tr><th>Item</th><th>Março/2027</th><th>Fevereiro/2028</th><th>Julho/2028</th></tr></thead>
-<tbody id="corpoEtapas"><tr><td colspan="4">Preencha os dados e calcule.</td></tr></tbody>
+<thead>
+<tr><th>Item</th><th>Março/2027</th><th>Fevereiro/2028</th><th>Julho/2028</th></tr>
+</thead>
+<tbody id="corpoEtapas">
+<tr><td colspan="4">Informe o vencimento-base e calcule a simulação.</td></tr>
+</tbody>
 </table>
 </div>
 </section>
 
 <section class="secao">
-<h2>5. Valores-hora, descontos e líquido</h2>
+<h2>4. Valores-hora, descontos e líquido</h2>
 <div id="tituloEtapa" class="destaque">Selecione uma etapa e calcule.</div>
 <div class="tabela-wrap">
 <table>
 <thead><tr><th>Item</th><th>Valor</th></tr></thead>
-<tbody id="corpoHoras"><tr><td colspan="2">Os valores serão exibidos após o cálculo.</td></tr></tbody>
+<tbody id="corpoHoras">
+<tr><td colspan="2">Os valores serão exibidos após o cálculo.</td></tr>
+</tbody>
 </table>
 </div>
-<p class="nota">A hora extra diurna é calculada a 150% da hora normal. A hora extra noturna é calculada a 150% mais o adicional noturno informado. O adicional noturno normal soma apenas o adicional por hora, sem repetir o valor da hora normal.</p>
-<p class="nota">Previdência: percentual sobre a remuneração regular, sem extras, adicional noturno e salário-família. Saúde: percentual sobre o bruto, excluindo salário-família. Sindifort: percentual sobre o VB projetado.</p>
-<p class="nota">IRRF simulado: bruto − salário-família − R$ 189,59 por dependente − Previdência; aplicar 27,5% e subtrair R$ 908,73. É uma regra estimativa informada para esta simulação, não uma apuração oficial de imposto.</p>
+
+<p class="nota">
+A hora extra diurna é calculada a 150% da hora normal. A hora extra noturna é calculada a 150% mais o adicional noturno informado. O adicional noturno normal soma somente o adicional por hora, sem repetir o valor da hora normal.
+</p>
+
+<p class="nota">
+IPM Previdência: percentual sobre a remuneração regular, sem horas extras, adicional noturno e salário-família. IPM Saúde: percentual sobre o bruto estimado, excluindo salário-família. Sindifort: percentual sobre o VB projetado.
+</p>
+
+<p class="nota">
+IRRF simulado: bruto − salário-família − R$ 189,59 por dependente − Previdência; aplicar 27,5% e subtrair R$ 908,73. Esta regra é estimativa e não substitui a apuração oficial.
+</p>
 </section>
 
-<footer>Simulador independente. Valores estimativos, não oficiais, sujeitos à conferência das normas aplicáveis.</footer>
+<footer>
+Simulador independente para estimativas. Os resultados dependem dos dados inseridos e das regras adotadas; não substituem contracheque ou norma oficial.
+</footer>
 </main>
 
 <script>
 "use strict";
+
 const $ = id => document.getElementById(id);
 
 const padrao = {
-turma:"2002",posse:"",vb:"",especifica:"",riscoAtual:"",grat25:"",
-geef:"15",ita:"15",gat1:"50",gat2:"75",gat3:"100",anu:"16",
-inflacao27:"4",inflacao28:"4",etapa:"0",divisor:"240",noturno:"20",
-extraDia:"0",extraNoite:"0",horasNoite:"0",familia:"8.13",
-prev:"14",saude:"2",sindifort:"2",outros:"0",dependentes:"0"
+turma:"2002",
+posse:"",
+vb:"",
+geef:"15",
+ita:"15",
+gat1:"50",
+gat2:"75",
+gat3:"100",
+anu:"16",
+inflacao27:"4",
+inflacao28:"4",
+etapa:"0",
+divisor:"240",
+noturno:"20",
+extraDia:"0",
+extraNoite:"0",
+horasNoite:"0",
+familia:"8.13",
+prev:"14",
+saude:"2",
+sindifort:"2",
+outros:"0",
+dependentes:"0"
 };
 
-const nomesEtapas=[
+const nomesEtapas = [
 "Março/2027 — GAT etapa 1",
 "Fevereiro/2028 — GAT etapa 2",
 "Julho/2028 — GAT etapa 3"
 ];
-const datasEtapas=[
-new Date(2027,2,1),new Date(2028,1,1),new Date(2028,6,1)
+
+const datasEtapas = [
+new Date(2027, 2, 1),
+new Date(2028, 1, 1),
+new Date(2028, 6, 1)
 ];
 
-const dinheiro=n=>(Number(n)||0).toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
-const numero=n=>(Number(n)||0).toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
-const valor=id=>{const n=Number($(id).value);return Number.isFinite(n)?n:0;};
-const percentual=id=>valor(id)/100;
+const dinheiro = n => (Number(n) || 0).toLocaleString("pt-BR", {
+style:"currency", currency:"BRL"
+});
 
-function lerDataPosse(){
-const texto=$("posse").value.trim();
-if(!texto)return null;
-const m=texto.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
-if(!m)throw new Error("Digite a data de posse no formato DD/MM/AAAA.");
-const dia=Number(m[1]),mes=Number(m[2]),ano=Number(m[3]);
-const d=new Date(ano,mes-1,dia);
-if(d.getFullYear()!==ano||d.getMonth()!==mes-1||d.getDate()!==dia)
+const numero = n => (Number(n) || 0).toLocaleString("pt-BR", {
+minimumFractionDigits:2, maximumFractionDigits:2
+});
+
+const valor = id => {
+const n = Number($(id).value);
+return Number.isFinite(n) ? n : 0;
+};
+
+const percentual = id => valor(id) / 100;
+
+function lerDataPosse() {
+const texto = $("posse").value.trim();
+if (!texto) return null;
+
+const m = texto.match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+if (!m) throw new Error("Digite a data de posse no formato DD/MM/AAAA.");
+
+const dia = Number(m[1]);
+const mes = Number(m[2]);
+const ano = Number(m[3]);
+const data = new Date(ano, mes - 1, dia);
+
+if (data.getFullYear() !== ano ||
+    data.getMonth() !== mes - 1 ||
+    data.getDate() !== dia) {
 throw new Error("A data de posse informada não é válida.");
-return d;
 }
 
-function descobrirVB(){
-const informado=$("vb").value.trim();
-if(informado!==""){
-const n=Number(informado);
-if(!Number.isFinite(n)||n<=0)throw new Error("Informe um vencimento-base válido ou deixe o campo vazio para estimar.");
-return {vb:n,metodo:"Valor informado diretamente"};
-}
-const candidatos=[];
-const especifica=$("especifica").value.trim();
-const risco=$("riscoAtual").value.trim();
-const grat=$("grat25").value.trim();
-
-if(especifica!==""&&Number(especifica)>0)candidatos.push(Number(especifica));
-if(risco!==""&&Number(risco)>0)candidatos.push(Number(risco)/0.40);
-if(grat!==""&&Number(grat)>0)candidatos.push(Number(grat)/0.25);
-
-if(candidatos.length===0)
-throw new Error("Informe o VB atual ou pelo menos um valor atual de gratificação específica, risco de vida ou gratificação de 25%.");
-
-const vb=candidatos.reduce((a,b)=>a+b,0)/candidatos.length;
-return {vb,metodo:"Estimativa pela média dos componentes informados"};
+return data;
 }
 
-function somarAnos(data,anos){
-const ano=data.getFullYear()+anos,mes=data.getMonth(),dia=data.getDate();
-return new Date(ano,mes,Math.min(dia,new Date(ano,mes+1,0).getDate()));
+function somarAnos(data, anos) {
+const ano = data.getFullYear() + anos;
+const mes = data.getMonth();
+const dia = data.getDate();
+const ultimoDia = new Date(ano, mes + 1, 0).getDate();
+return new Date(ano, mes, Math.min(dia, ultimoDia));
 }
 
-function anuênioNaEtapa(posse,dataEtapa){
-if(!posse)return valor("anu");
-const corte=new Date(2026,9,15);
-let acrescimos=0;
-for(let anos=1;anos<=100;anos++){
-const aniversario=somarAnos(posse,anos);
-if(aniversario>dataEtapa)break;
-if(aniversario>corte)acrescimos++;
-}
-return Math.max(0,valor("anu")+acrescimos);
-}
+function anuênioNaEtapa(posse, dataEtapa) {
+if (!posse) return valor("anu");
 
-function progressaoTurma(){
-const turma=$("turma").value;
-if(turma==="2002")return 4;
-if(turma==="2010")return 2;
-return 0;
+const corte = new Date(2026, 9, 15);
+let acrescimos = 0;
+
+for (let anos = 1; anos <= 100; anos++) {
+const aniversario = somarAnos(posse, anos);
+if (aniversario > dataEtapa) break;
+if (aniversario > corte) acrescimos++;
 }
 
-function validar(){
-const percentuais=["geef","ita","gat1","gat2","gat3","anu","prev","saude","sindifort","noturno"];
-for(const id of percentuais)if(valor(id)<0)throw new Error("Os percentuais não podem ser negativos.");
-const campos=["especifica","riscoAtual","grat25","vb","extraDia","extraNoite","horasNoite","familia","outros","dependentes"];
-for(const id of campos){
-if($(id).value.trim()!==""&&valor(id)<0)throw new Error("Os valores e quantidades não podem ser negativos.");
-}
-if(!Number.isInteger(valor("dependentes")))throw new Error("Informe um número inteiro de dependentes.");
-if(percentual("inflacao27")<=-1||percentual("inflacao28")<=-1)throw new Error("A inflação não pode ser igual ou inferior a -100%.");
-if(valor("divisor")<=0)throw new Error("O divisor deve ser maior que zero.");
+return Math.max(0, valor("anu") + acrescimos);
 }
 
-function calcularEtapa(i,vbAtual,posse){
-const vb2027=vbAtual*(1+percentual("inflacao27"));
-const vb2028=vb2027*(1+percentual("inflacao28"));
-const vb=i===0?vb2027:vb2028;
-const gatId=["gat1","gat2","gat3"][i];
-const anuPercentual=anuênioNaEtapa(posse,datasEtapas[i]);
-const progressao=vb*progressaoTurma()/100;
-
-const vencimento=vb;
-const especifica=vb;
-const risco=vb*0.40;
-const grat25=vb*0.25;
-const geef=vb*percentual("geef");
-const ita=vb*percentual("ita");
-const gat=vb*percentual(gatId);
-const anu=vb*anuPercentual/100;
-
-const regular=vencimento+especifica+risco+grat25+geef+ita+gat+anu+progressao;
-const valorHora=regular/valor("divisor");
-const adicionalNoturnoHora=valorHora*percentual("noturno");
-const horaNoturnaComAdicional=valorHora+adicionalNoturnoHora;
-const horaExtraDiurna=valorHora*1.5;
-const horaExtraNoturna=valorHora*(1.5+percentual("noturno"));
-
-const totalExtraDiurna=horaExtraDiurna*valor("extraDia");
-const totalExtraNoturna=horaExtraNoturna*valor("extraNoite");
-const totalAdicionalNoturno=adicionalNoturnoHora*valor("horasNoite");
-const familia=valor("familia");
-const bruto=regular+totalExtraDiurna+totalExtraNoturna+totalAdicionalNoturno+familia;
-
-const previdencia=regular*percentual("prev");
-const ipmSaude=Math.max(0,bruto-familia)*percentual("saude");
-const sindifort=vb*percentual("sindifort");
-const baseIRRF=Math.max(0,bruto-familia-189.59*valor("dependentes")-previdencia);
-const irrf=Math.max(0,baseIRRF*0.275-908.73);
-const outros=valor("outros");
-const descontos=previdencia+ipmSaude+sindifort+irrf+outros;
-const liquido=bruto-descontos;
-
-return {nome:nomesEtapas[i],vb,especifica,risco,grat25,geef,ita,gat,anu,anuPercentual,progressao,regular,valorHora,adicionalNoturnoHora,horaNoturnaComAdicional,horaExtraDiurna,horaExtraNoturna,totalExtraDiurna,totalExtraNoturna,totalAdicionalNoturno,familia,bruto,previdencia,ipmSaude,sindifort,baseIRRF,irrf,outros,descontos,liquido};
+function validar() {
+if ($("vb").value.trim() === "" || valor("vb") <= 0) {
+throw new Error("Informe o vencimento-base já integrado conforme o novo PCCS.");
 }
 
-function linha(nome,valores,classe=""){
+const percentuais = [
+"geef","ita","gat1","gat2","gat3","anu",
+"prev","saude","sindifort","noturno"
+];
+
+for (const id of percentuais) {
+if (valor(id) < 0) throw new Error("Os percentuais não podem ser negativos.");
+}
+
+const campos = [
+"extraDia","extraNoite","horasNoite","familia","outros","dependentes"
+];
+
+for (const id of campos) {
+if (valor(id) < 0) throw new Error("Valores e quantidades não podem ser negativos.");
+}
+
+if (!Number.isInteger(valor("dependentes"))) {
+throw new Error("Informe um número inteiro de dependentes.");
+}
+
+if (percentual("inflacao27") <= -1 || percentual("inflacao28") <= -1) {
+throw new Error("A inflação não pode ser igual ou inferior a -100%.");
+}
+
+if (valor("divisor") <= 0) {
+throw new Error("O divisor deve ser maior que zero.");
+}
+}
+
+function calcularEtapa(i, vbAtual, posse) {
+const vb2027 = vbAtual * (1 + percentual("inflacao27"));
+const vb2028 = vb2027 * (1 + percentual("inflacao28"));
+const vb = i === 0 ? vb2027 : vb2028;
+
+const gatId = ["gat1","gat2","gat3"][i];
+const anuPercentual = anuênioNaEtapa(posse, datasEtapas[i]);
+
+const vencimento = vb;
+const geef = vb * percentual("geef");
+const ita = vb * percentual("ita");
+const gat = vb * percentual(gatId);
+const anu = vb * anuPercentual / 100;
+
+/* O VB já está integrado: não somar novamente as progressões da turma. */
+const regular = vencimento + geef + ita + gat + anu;
+
+const valorHora = regular / valor("divisor");
+const adicionalNoturnoHora = valorHora * percentual("noturno");
+const horaNoturnaComAdicional = valorHora + adicionalNoturnoHora;
+const horaExtraDiurna = valorHora * 1.5;
+const horaExtraNoturna = valorHora * (1.5 + percentual("noturno"));
+
+const totalExtraDiurna = horaExtraDiurna * valor("extraDia");
+const totalExtraNoturna = horaExtraNoturna * valor("extraNoite");
+const totalAdicionalNoturno = adicionalNoturnoHora * valor("horasNoite");
+const familia = valor("familia");
+
+const bruto = regular + totalExtraDiurna + totalExtraNoturna +
+totalAdicionalNoturno + familia;
+
+const previdencia = regular * percentual("prev");
+const ipmSaude = Math.max(0, bruto - familia) * percentual("saude");
+const sindifort = vb * percentual("sindifort");
+
+const baseIRRF = Math.max(
+0,
+bruto - familia - 189.59 * valor("dependentes") - previdencia
+);
+
+const irrf = Math.max(0, baseIRRF * 0.275 - 908.73);
+const outros = valor("outros");
+const descontos = previdencia + ipmSaude + sindifort + irrf + outros;
+const liquido = bruto - descontos;
+
+return {
+nome:nomesEtapas[i],vb,geef,ita,gat,anu,anuPercentual,
+regular,valorHora,adicionalNoturnoHora,horaNoturnaComAdicional,
+horaExtraDiurna,horaExtraNoturna,totalExtraDiurna,
+totalExtraNoturna,totalAdicionalNoturno,familia,bruto,
+previdencia,ipmSaude,sindifort,baseIRRF,irrf,outros,descontos,liquido
+};
+}
+
+function linha(nome, valores, classe="") {
 return `<tr class="${classe}"><td>${nome}</td>${valores.map(v=>`<td>${v}</td>`).join("")}</tr>`;
 }
 
-function mostrar(rs,info){
-$("resultadoVB").innerHTML="<strong>Vencimento-base atual estimado: "+dinheiro(info.vb)+"</strong><br>"+info.metodo+".";
-
-const itens=[
-["VB projetado",r=>dinheiro(r.vb)],
-["Gratificação específica (100%)",r=>dinheiro(r.especifica)],
-["Risco de vida (40%)",r=>dinheiro(r.risco)],
-["Gratificação (25%)",r=>dinheiro(r.grat25)],
+function mostrarResultados(rs) {
+const itens = [
+["Vencimento-base projetado",r=>dinheiro(r.vb)],
 ["GEEF",r=>dinheiro(r.geef)],
 ["ITA",r=>dinheiro(r.ita)],
 ["GAT",r=>dinheiro(r.gat)],
 ["Anuênio (%)",r=>numero(r.anuPercentual)+"%"],
 ["Valor do anuênio",r=>dinheiro(r.anu)],
-["Progressão automática da turma",r=>dinheiro(r.progressao)],
 ["Remuneração regular",r=>dinheiro(r.regular)],
-["Extras diurnas",r=>dinheiro(r.totalExtraDiurna)],
-["Extras noturnas",r=>dinheiro(r.totalExtraNoturna)],
+["Horas extras diurnas",r=>dinheiro(r.totalExtraDiurna)],
+["Horas extras noturnas",r=>dinheiro(r.totalExtraNoturna)],
 ["Adicional noturno normal",r=>dinheiro(r.totalAdicionalNoturno)],
 ["Salário-família",r=>dinheiro(r.familia)],
 ["Bruto estimado",r=>dinheiro(r.bruto)],
@@ -347,16 +460,17 @@ const itens=[
 ["Líquido estimado",r=>dinheiro(r.liquido)]
 ];
 
-$("corpoEtapas").innerHTML=itens.map(([nome,fn])=>{
-const classe=nome==="Líquido estimado"?"liquido":
-["Bruto estimado","Total de descontos"].includes(nome)?"total":"";
-return linha(nome,rs.map(fn),classe);
+$("corpoEtapas").innerHTML = itens.map(([nome,fn]) => {
+const classe = nome === "Líquido estimado" ? "liquido" :
+["Bruto estimado","Total de descontos"].includes(nome) ? "total" : "";
+return linha(nome, rs.map(fn), classe);
 }).join("");
 
-const r=rs[Number($("etapa").value)];
-$("tituloEtapa").innerHTML="<strong>"+r.nome+"</strong><br>Remuneração regular: <strong>"+dinheiro(r.regular)+"</strong>";
+const r = rs[Number($("etapa").value)];
+$("tituloEtapa").innerHTML =
+`<strong>${r.nome}</strong><br>Remuneração regular: <strong>${dinheiro(r.regular)}</strong>`;
 
-const horas=[
+const horas = [
 ["Divisor da jornada",numero(valor("divisor"))+" horas"],
 ["Valor da hora normal",dinheiro(r.valorHora)],
 ["Adicional noturno por hora",dinheiro(r.adicionalNoturnoHora)],
@@ -371,40 +485,43 @@ const horas=[
 ["Total de descontos",dinheiro(r.descontos)],
 ["Líquido estimado",dinheiro(r.liquido)]
 ];
-$("corpoHoras").innerHTML=horas.map(([nome,v])=>{
-const classe=nome==="Líquido estimado"?"liquido":nome==="Bruto estimado"?"total":"";
+
+$("corpoHoras").innerHTML = horas.map(([nome,v]) => {
+const classe = nome === "Líquido estimado" ? "liquido" :
+nome === "Bruto estimado" ? "total" : "";
 return `<tr class="${classe}"><td>${nome}</td><td>${v}</td></tr>`;
 }).join("");
 }
 
-function calcular(){
-$("mensagem").textContent="";
-try{
+function calcular() {
+$("mensagem").textContent = "";
+
+try {
 validar();
-const info=descobrirVB();
-const posse=lerDataPosse();
-const rs=[0,1,2].map(i=>calcularEtapa(i,info.vb,posse));
-mostrar(rs,info);
-}catch(e){
-$("mensagem").textContent=e.message||"Confira os dados informados.";
+const vb = valor("vb");
+const posse = lerDataPosse();
+const rs = [0,1,2].map(i => calcularEtapa(i,vb,posse));
+mostrarResultados(rs);
+} catch (e) {
+$("mensagem").textContent = e.message || "Confira os dados informados.";
 }
 }
 
-function restaurar(){
-for(const [id,v] of Object.entries(padrao))$(id).value=v;
-$("mensagem").textContent="";
-$("resultadoVB").textContent="O vencimento-base estimado aparecerá após preencher os dados e calcular.";
-$("corpoEtapas").innerHTML='<tr><td colspan="4">Preencha os dados e calcule.</td></tr>';
-$("tituloEtapa").textContent="Selecione uma etapa e calcule.";
-$("corpoHoras").innerHTML='<tr><td colspan="2">Os valores serão exibidos após o cálculo.</td></tr>';
+function restaurar() {
+for (const [id,v] of Object.entries(padrao)) $(id).value = v;
+$("mensagem").textContent = "";
+$("corpoEtapas").innerHTML = '<tr><td colspan="4">Informe o vencimento-base e calcule a simulação.</td></tr>';
+$("tituloEtapa").textContent = "Selecione uma etapa e calcule.";
+$("corpoHoras").innerHTML = '<tr><td colspan="2">Os valores serão exibidos após o cálculo.</td></tr>';
 }
 
-$("posse").addEventListener("input",function(){
-let t=this.value.replace(/\D/g,"").slice(0,8);
-if(t.length>4)t=t.slice(0,2)+"/"+t.slice(2,4)+"/"+t.slice(4);
-else if(t.length>2)t=t.slice(0,2)+"/"+t.slice(2);
-this.value=t;
+$("posse").addEventListener("input",function() {
+let t = this.value.replace(/\D/g,"").slice(0,8);
+if (t.length > 4) t = t.slice(0,2)+"/"+t.slice(2,4)+"/"+t.slice(4);
+else if (t.length > 2) t = t.slice(0,2)+"/"+t.slice(2);
+this.value = t;
 });
+
 $("calcular").addEventListener("click",calcular);
 $("restaurar").addEventListener("click",restaurar);
 $("etapa").addEventListener("change",calcular);
